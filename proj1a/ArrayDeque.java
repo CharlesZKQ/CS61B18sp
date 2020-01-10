@@ -353,22 +353,7 @@ public class ArrayDeque<T> {
      * Create a deep copy of other.
 
      */
-
-    public ArrayDeque(ArrayDeque other) {
-
-        items = (T[]) new Object[other.size];
-
-        nextFirst = other.nextFirst;
-
-        nextLast = other.nextLast;
-
-        size = other.size;
-
-
-
-        System.arraycopy(other.items, 0, items, 0, other.size);
-
-    }
+    
 
 
 
