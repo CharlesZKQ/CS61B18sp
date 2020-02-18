@@ -6,17 +6,16 @@ public class PercolationStats {
     private int N;
     private int T;
     private PercolationFactory pf;
-    private Percolation SystemNByN;
     private double[] thresholds;
 
     // perform T independent experiments on an N-by-N grid
     public PercolationStats(int N, int T, PercolationFactory pf) {
-        if (N < 0) {
+        if (N <= 0) {
             throw new IllegalArgumentException(
                     "N should be greater than 0 but given N = " + N + "."
             );
         }
-        if (T < 0) {
+        if (T <= 0) {
             throw new IllegalArgumentException(
                     "T should be greater than 0 but given T = " + T + "."
             );
@@ -25,12 +24,13 @@ public class PercolationStats {
         this.T = T;
         this.pf = pf;
         thresholds = new double[T];
-        SystemNByN = pf.make(N);
+
         calculate();
     }
 
     private void calculate() {
         for (int i = 0; i < T; i++) {
+            Percolation SystemNByN = pf.make(N);
             while (!SystemNByN.percolates()) {
                 int randomRow = StdRandom.uniform(N);
                 int randomCol = StdRandom.uniform(N);
@@ -43,7 +43,7 @@ public class PercolationStats {
     // sample mean of percolation threshold
     public double mean() {
         return StdStats.mean(thresholds);
-        }
+    }
 
     // sample standard deviation of percolation threshold
     public double stddev() {

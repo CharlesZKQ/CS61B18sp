@@ -12,8 +12,8 @@ public class Percolation {
     private boolean[] openGridIn1D;
     private boolean percolate;
 
-    private Set<Integer> TopOpenIndex = new HashSet<>();
-    private Set<Integer> BottomOpenIndex = new HashSet<>();
+    private Set<Integer> topOpenIndex = new HashSet<>();
+    private Set<Integer> bottomOpenIndex = new HashSet<>();
 
 
     /**
@@ -53,11 +53,12 @@ public class Percolation {
      * @param  col the number of cols, these two parameters are the same in hw2, which is N!
      */
     private boolean isValidCoordinate(int row, int col) {
-        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
-            return false;
-        } else {
-            return true;
-        }
+//        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+//            return false;
+//        } else {
+//            return true;
+//        }
+        return (row < 0 || row > N - 1 || col < 0 || col > N - 1);
     }
 
     /**
@@ -79,10 +80,10 @@ public class Percolation {
         openGridIn1D[index1D] = true;
         int parentID = connectedGrid.find(index1D);
         if (index1D < N) {
-            TopOpenIndex.add(parentID);
+            topOpenIndex.add(parentID);
         }
         if (N * N - index1D <= N) {
-            BottomOpenIndex.add(parentID);
+            bottomOpenIndex.add(parentID);
         }
         //update the connectivity between the new open point and adjacent points
         updateConnect(row, col, row + 1, col);
@@ -92,7 +93,7 @@ public class Percolation {
         openNum += 1;
 
         int updatedID = connectedGrid.find(index1D);
-        if (TopOpenIndex.contains(updatedID) && BottomOpenIndex.contains(updatedID)) {
+        if (topOpenIndex.contains(updatedID) && bottomOpenIndex.contains(updatedID)) {
             percolate = true;
         }
     }
@@ -108,21 +109,21 @@ public class Percolation {
             int updatedID = connectedGrid.find(index);
 
             //update the index of the Top layer so that we can avoid iteration
-            if (TopOpenIndex.contains(oriID)) {
-                TopOpenIndex.remove(oriID);
-                TopOpenIndex.add(updatedID);
-            } else if (TopOpenIndex.contains(neighborID)) {
-                TopOpenIndex.remove(neighborID);
-                TopOpenIndex.add(updatedID);
+            if (topOpenIndex.contains(oriID)) {
+                topOpenIndex.remove(oriID);
+                topOpenIndex.add(updatedID);
+            } else if (topOpenIndex.contains(neighborID)) {
+                topOpenIndex.remove(neighborID);
+                topOpenIndex.add(updatedID);
             }
 
             //update the index of Bottom layer
-            if (BottomOpenIndex.contains(oriID)) {
-                BottomOpenIndex.remove(oriID);
-                BottomOpenIndex.add(updatedID);
-            } else if (BottomOpenIndex.contains(neighborID)) {
-                BottomOpenIndex.remove(neighborID);
-                BottomOpenIndex.add(updatedID);
+            if (bottomOpenIndex.contains(oriID)) {
+                bottomOpenIndex.remove(oriID);
+                bottomOpenIndex.add(updatedID);
+            } else if (bottomOpenIndex.contains(neighborID)) {
+                bottomOpenIndex.remove(neighborID);
+                bottomOpenIndex.add(updatedID);
             }
         }
 
@@ -156,7 +157,7 @@ public class Percolation {
             );
         }
         int index1D = xyTo1D(row, col);
-        return TopOpenIndex.contains(connectedGrid.find(index1D));
+        return topOpenIndex.contains(connectedGrid.find(index1D));
     }
 
     /** return the number of the open sites, use openNum to record.
@@ -172,5 +173,9 @@ public class Percolation {
      */
     public boolean percolates() {
         return percolate;
+    }
+
+    public static void main(String[] args) {
+
     }
 }

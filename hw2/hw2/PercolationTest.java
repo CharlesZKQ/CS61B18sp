@@ -7,22 +7,22 @@ public class PercolationTest {
 
     @Test
     public void testIsOpen() {
-        percolation.open(3,4);
-        assertTrue(percolation.isOpen(3,4));
-        assertFalse(percolation.isOpen(1,1));
-        percolation.open(1,1);
-        assertTrue(percolation.isOpen(1,1));
+        percolation.open(3, 4);
+        assertTrue(percolation.isOpen(3, 4));
+        assertFalse(percolation.isOpen(1, 1));
+        percolation.open(1, 1);
+        assertTrue(percolation.isOpen(1, 1));
     }
 
     @Test
-    public void testIsFull(){
+    public void testIsFull() {
         percolation.open(0, 1);
         assertTrue(percolation.isFull(0, 1));
-        percolation.open(1,1);
-        assertTrue(percolation.isFull(1,1));
+        percolation.open(1, 1);
+        assertTrue(percolation.isFull(1, 1));
         assertTrue(percolation.isFull(0, 1));
-        percolation.open(2,2);
-        assertFalse(percolation.isFull(2,2));
+        percolation.open(2, 2);
+        assertFalse(percolation.isFull(2, 2));
     }
 
     @Test
