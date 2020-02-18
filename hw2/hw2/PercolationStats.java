@@ -36,7 +36,7 @@ public class PercolationStats {
                 int randomCol = StdRandom.uniform(N);
                 systemNByN.open(randomRow, randomCol);
             }
-            thresholds[i] = systemNByN.numberOfOpenSites() / (N * N);
+            thresholds[i] = (double)systemNByN.numberOfOpenSites() / (N * N);
         }
     }
 
