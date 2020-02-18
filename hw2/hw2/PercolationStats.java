@@ -30,13 +30,13 @@ public class PercolationStats {
 
     private void calculate() {
         for (int i = 0; i < T; i++) {
-            Percolation SystemNByN = pf.make(N);
-            while (!SystemNByN.percolates()) {
+            Percolation systemNByN = pf.make(N);
+            while (!systemNByN.percolates()) {
                 int randomRow = StdRandom.uniform(N);
                 int randomCol = StdRandom.uniform(N);
-                SystemNByN.open(randomRow, randomCol);
+                systemNByN.open(randomRow, randomCol);
             }
-            thresholds[i] = SystemNByN.numberOfOpenSites() / (N * N);
+            thresholds[i] = systemNByN.numberOfOpenSites() / (N * N);
         }
     }
 

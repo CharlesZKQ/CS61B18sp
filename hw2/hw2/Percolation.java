@@ -58,7 +58,7 @@ public class Percolation {
 //        } else {
 //            return true;
 //        }
-        return (row < 0 || row > N - 1 || col < 0 || col > N - 1);
+        return !(row < 0 || row > N - 1 || col < 0 || col > N - 1);
     }
 
     /**
