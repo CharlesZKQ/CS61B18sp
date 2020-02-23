@@ -24,27 +24,24 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     }
 
     /**
-     * Returns the index of the node to the left of the node at i.
+     * Returns the index of the node to the left of the node at i.(left child index)
      */
     private static int leftIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return i * 2;
     }
 
     /**
-     * Returns the index of the node to the right of the node at i.
+     * Returns the index of the node to the right of the node at i.(right child index)
      */
     private static int rightIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return i * 2 + 1;
     }
 
     /**
      * Returns the index of the node that is the parent of the node at i.
      */
     private static int parentIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return i / 2;
     }
 
     /**
@@ -106,9 +103,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void swim(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-
-        /** TODO: Your code here. */
-        return;
+        int parentIndex = parentIndex(index);
+        if (index == 1) {
+            return;
+        }
+        if (min(index, parentIndex) == index) {
+            swap(index, parentIndex);
+            swim(parentIndex);
+        }
     }
 
     /**
@@ -117,9 +119,34 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
+        int leftChild = leftIndex(index);
+        int rightChild = rightIndex(index);
+        boolean leftExist = inBounds(leftChild);
+        boolean rightExist = inBounds(rightChild);
 
-        /** TODO: Your code here. */
-        return;
+        if (leftExist && rightExist) {
+            int minChildIndex = min(leftChild, rightChild);
+            if (min(minChildIndex, index) == index){
+                return;
+            }
+            swap(index, minChildIndex);
+            sink(minChildIndex);
+        } else if (leftExist && (!rightExist)) {
+            if (min(leftChild, index) == index) {
+                return;
+            }
+            swap(index, leftChild);
+            sink(leftChild);
+        } else if (!leftExist && rightExist) {
+            if (min(rightChild, index) == index) {
+                return;
+            }
+            swap(index, rightChild);
+            sink(rightChild);
+        } else {
+            return;
+        }
+
     }
 
     /**
@@ -132,8 +159,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         if (size + 1 == contents.length) {
             resize(contents.length * 2);
         }
+        Node nodeToInsert = new Node(item, priority);
+        int index = size + 1;
+        contents[index] = nodeToInsert;
+        size += 1;
+        swim(index);
 
-        /* TODO: Your code here! */
+
     }
 
     /**
@@ -142,8 +174,8 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T peek() {
-        /* TODO: Your code here! */
-        return null;
+
+        return contents[1].myItem;
     }
 
     /**
@@ -157,8 +189,12 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T removeMin() {
-        /* TODO: Your code here! */
-        return null;
+        T itemToRemove = peek();
+        swap(1, size);
+        contents[size] = null;
+        size -= 1;
+        sink(1);
+        return itemToRemove;
     }
 
     /**
@@ -180,8 +216,14 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public void changePriority(T item, double priority) {
-        /* TODO: Your code here! */
-        return;
+        for (int i = 1; i <= size() + 1; i++) {
+            Node node = contents[i];
+            if (node.item().equals(item)) {
+                double oldPriority = node.priority();
+                oldPriority = priority;
+//                node.priority() = priority;
+            }
+        }
     }
 
     /**

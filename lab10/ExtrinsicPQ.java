@@ -1,7 +1,7 @@
 /**
  * Priority queue where objects have no intrinsic priority. Instead,
  * priorities are supplied as an argument during insertion and can be
- * changed.
+ *  * changed.
  */
 public interface ExtrinsicPQ<T> {
     /* Inserts an item with the given priority value. This is also known as "enqueue", or "offer". */
