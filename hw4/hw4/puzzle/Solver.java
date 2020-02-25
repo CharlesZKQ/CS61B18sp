@@ -83,8 +83,8 @@ public class Solver {
     }
 
 
-    int searchedCount() {
-        return searchedCnt;
-
-    }
+//    int searchedCount() {
+//        return searchedCnt;
+//
+//    }
 }

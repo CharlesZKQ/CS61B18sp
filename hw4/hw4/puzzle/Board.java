@@ -73,10 +73,10 @@ public class Board implements WorldState {
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                int actualNum = tileAt(i, j);
-                if (actualNum == BLANK) {
-                    continue;
+                if (expectedVal == size * size) { // Break when hit the BLANK tile\
+                    break;
                 }
+                int actualNum = tileAt(i, j);
                 if (actualNum != expectedVal) {
                     totalWrong += 1;
                 }
@@ -123,7 +123,7 @@ public class Board implements WorldState {
         }
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
-                if (this.tiles[i][j] != boardY.tiles[i][j]) {
+                if (this.tileAt(i, j) != boardY.tileAt(i, j)) {
                     return false;
                 }
             }
