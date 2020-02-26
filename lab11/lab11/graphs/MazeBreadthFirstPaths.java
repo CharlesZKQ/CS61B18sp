@@ -24,6 +24,7 @@ public class MazeBreadthFirstPaths extends MazeExplorer {
         fringe.add(s);
         marked[s] = true;
         distTo[s] = 0;
+        edgeTo[s] = s;
     }
 
     /** Conducts a breadth first search of the maze starting at the source. */

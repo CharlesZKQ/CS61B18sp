@@ -29,7 +29,9 @@ public class MazeAStarPath extends MazeExplorer {
 
     /** Estimate of the distance from v to the target. */
     private int h(int v) {
-        //Math.abs(sourceX - targetX) + Math.abs(sourceY - targetY);
+//        int x = maze.toX(t)- maze.toX(v);
+//        int y = maze.toY(t) - maze.toY(v);
+//        return Math.abs(x) + Math.abs(y);
         return Math.abs(t - v);
     }
 
