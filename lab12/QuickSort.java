@@ -47,13 +47,50 @@ public class QuickSort {
     private static <Item extends Comparable> void partition(
             Queue<Item> unsorted, Item pivot,
             Queue<Item> less, Queue<Item> equal, Queue<Item> greater) {
-        // Your code here!
+        for (Item item : unsorted) {
+            int cmp = item.compareTo(pivot);
+            if (cmp > 0) {
+                greater.enqueue(item);
+            } else if (cmp < 0) {
+                less.enqueue(item);
+            } else {
+                equal.enqueue(item);
+            }
+        }
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> quickSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+        if (items.size() <= 1) {
+            return items;
+        }
+        Queue<Item> less = new Queue<>();
+        Queue<Item> greater = new Queue<>();
+        Queue<Item> equal = new Queue<>();
+        Item randomPivot = getRandomItem(items);
+        partition(items, randomPivot, less, equal, greater);
+        less = quickSort(less);
+        equal = catenate(less, equal);
+        greater = quickSort(greater);
+        greater = catenate(equal, greater);
+        return greater;
     }
+
+    public static void main(String[] args) {
+        Queue<String> languages = new Queue<>();
+        languages.enqueue("Python"); // Add my language-learning history
+        languages.enqueue("SQL");
+        languages.enqueue("Java");
+        languages.enqueue("Julia");
+        languages.enqueue("JavaScripts");
+        languages.enqueue("Lisp??");
+        languages.enqueue("Lisp??"); // Checks duplicated
+        Queue<String> sortedLanguages = QuickSort.quickSort(languages);
+        // Should print `Python SQL Java Julia JavaScripts Lisp?? Lisp??`
+        System.out.println(languages.toString());
+        // Should print `Java JavaScript Julia Lisp?? Lisp?? Python SQL
+        System.out.println(sortedLanguages.toString());
+    }
+
 }
