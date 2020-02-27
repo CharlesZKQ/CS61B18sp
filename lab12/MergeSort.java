@@ -85,10 +85,10 @@ public class MergeSort {
             queueRight.enqueue(item.dequeue());
         }
 
-        queueLeft = mergeSort(queueLeft);
-        queueRight = mergeSort(queueRight);
+        Queue<Item> q1 = mergeSort(queueLeft);
+        Queue<Item> q2 = mergeSort(queueRight);
 
-        items = mergeSortedQueues(queueLeft, queueRight);
+        items = mergeSortedQueues(q1, q2);
         return items;
     }
 
