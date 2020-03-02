@@ -15,7 +15,7 @@ public class SeamCarver {
 
     // current picture
     public Picture picture() {
-        return pic;
+        return new Picture(this.pic);
     }
 
     // width of current picture
@@ -33,11 +33,15 @@ public class SeamCarver {
         if (x < 0 || y < 0 || x > width() - 1 || y > height() - 1) {
             throw new IndexOutOfBoundsException("the input of column x or row y is out of bound!");
         }
-        Color[] colorNeighbors = colorAtRightAndLeft(x, y);
-        Color colorXLeft = colorNeighbors[0];
-        Color colorXRight = colorNeighbors[1];
-        Color colorYTop = colorNeighbors[2];
-        Color colorYBot = colorNeighbors[3];
+        int xLeft = changeX(x, -1);
+        int xRight = changeX(x, 1);
+        int yTop = changeY(y, -1);
+        int yBot = changeY(y, 1);
+
+        Color colorXLeft = pic.get(xLeft, y);
+        Color colorXRight = pic.get(xRight, y);
+        Color colorYTop = pic.get(x, yTop);
+        Color colorYBot = pic.get(x, yBot);
 
         //compute square of the x-gradient
         int rX = abs(colorXRight.getRed(), colorXLeft.getRed());
@@ -56,52 +60,22 @@ public class SeamCarver {
         return energy;
     }
 
-    private Color[] colorAtRightAndLeft(int x, int y) {
-        Color[] colors = new Color[4]; // cash from xLeft, xRight, yTop, yBot
-        Color[] colorsY;
-
-        // compute the color neighbor of x coordinate, be careful about the border.
-        if (x == width() - 1) {
-            colors[0] = pic.get(x - 1, y); // get color of xLeft(same as below)
-            colors[1] = pic.get(0, y);// get color of xRight(same as below)
-            colorsY = checkY(x, y);
-            colors[2] = colorsY[0];// get color of y top(same as below)
-            colors[3] = colorsY[1];// get color of y bottom(same as below)
-        } else if (x == 0) {
-            colors[0] = pic.get(width() - 1, y);
-            colors[1] = pic.get(x + 1, y);
-            colorsY = checkY(x, y);
-            colors[2] = colorsY[0];
-            colors[3] = colorsY[1];
-        } else {
-            colors[0] = pic.get(x - 1, y);
-            colors[1] = pic.get(x + 1, y);
-            colorsY = checkY(x, y);
-            colors[2] = colorsY[0];
-            colors[3] = colorsY[1];
+    private int changeX(int x, int diff) {
+        if (x + diff == width) {
+            return 0;
+        } else if (x + diff < 0) {
+            return width - 1;
         }
-        return colors;
+        return x + diff;
     }
 
-    private Color[] checkY (int x, int y) {
-        Color[] colorsY = new Color[2];// cash color y from Top to bottom
-        if (y == height() - 1) {
-            Color colorYBot = pic.get(x, 0);
-            Color colorYTop = pic.get(x, y - 1);
-            colorsY[0] = colorYTop;
-            colorsY[1] = colorYBot;
-        } else if (y == 0) {
-            Color colorYTop = pic.get(x, height() - 1);
-            Color colorYBot = pic.get(x, y + 1);
-            colorsY[0] = colorYTop;
-            colorsY[1] = colorYBot;
-        } else {
-            Color colorYTop = pic.get(x, y - 1);
-            Color colorYBot = pic.get(x, y + 1);
-            colorsY[0] = colorYTop;
-            colorsY[1] = colorYBot;
+    private int changeY(int y, int diff) {
+        if (y + diff == height) {
+            return 0;
+        } else if (y + diff < 0) {
+            return height - 1;
         }
-        return colorsY;
+        return y + diff;
     }
 
     private int abs (int first, int second) {
@@ -138,7 +112,7 @@ public class SeamCarver {
     public int[] findVerticalSeam() {
         int[] seam = new int[height];
         double totalEnergy = Double.MAX_VALUE;
-        //compute the
+
         for (int col = 0; col < width; col++) {
             int x = col;
             int y = 0;
@@ -206,7 +180,7 @@ public class SeamCarver {
         pic = SeamRemover.removeHorizontalSeam(pic, seam);
     }
 
-    public boolean checkConsecutive(int[] seam) {
+    private boolean checkConsecutive(int[] seam) {
         for (int i = 0; i < seam.length; i++) {
             if (abs(seam[i], seam[i+1]) > 1) {
                 return false;
