@@ -19,81 +19,21 @@ public class RadixSort {
      *
      * @return String[] the sorted array
      */
+
     public static String[] sort(String[] asciis) {
-            Queue<String>[] buckets = new Queue[256];
-
-            for (int i = 0; i < 256; i++)
-
-                buckets[i] = new LinkedList();
-
-
-            boolean sorted = false;
-
-            int lengthInc = 0;
-
-
-            String[] sortedArr = new String[asciis.length];
-
-            System.arraycopy(asciis, 0, sortedArr, 0, asciis.length);
-
-
-            while (!sorted) {
-
-                sorted = true;
-
-
-                for (String item : sortedArr) {
-
-                    int index = item.length() - lengthInc - 1;
-
-                    if (index >= 0) {
-
-                        sorted = false;
-
-                        int ofASCII = (int) item.charAt(index);
-
-                        buckets[ofASCII].add(item);
-
-                    } else {
-
-                        buckets[(int) item.charAt(0)].add(item);
-
-                    }
-
-
-                }
-
-
-                lengthInc++;
-
-                int index = 0;
-
-
-                for (Queue<String> bucket : buckets) {
-
-                    while (!bucket.isEmpty()) {
-
-                        sortedArr[index] = bucket.remove();
-
-                        index++;
-
-                    }
-
-                }
-
-
-                //System.out.println();
-
-
-            }
-
-
-            //System.out.println("");
-
-
-            return sortedArr;
-
+        int maxLength = Integer.MIN_VALUE;
+        for (String s : asciis) {
+            maxLength = maxLength > s.length() ? maxLength : s.length();
         }
+
+        String[] res = asciis.clone();
+        for (int d = maxLength - 1; d >= 0; d--) {
+            res = sortHelperLSD(res, d);
+        }
+        return res;
+    }
+
+
 
         /**
          * LSD helper method that performs a destructive counting sort the array of
@@ -101,8 +41,37 @@ public class RadixSort {
          * @param asciis Input array of Strings
          * @param index The position to sort the Strings on.
          */
-    private static void sortHelperLSD(String[] asciis, int index) {
-            return;
+
+        private static String[] sortHelperLSD(String[] asciis, int index) {
+            int[] counts = new int[256];
+
+            for (String s: asciis) {
+                if (s.length() - 1 < index) {
+                    counts[0]++;
+                } else {
+                    counts[s.charAt(index)]++;
+                }
+            }
+
+            int[] starts = new int[256];
+            int pos = 0;
+            for (int i = 0; i < starts.length; i += 1) {
+                starts[i] = pos;
+                pos += counts[i];
+            }
+            String[] sorted = new String[asciis.length];
+            for (String s: asciis) {
+                if (s.length() -1 < index) {
+                    int place = starts[0];
+                    sorted[place] = s;
+                    starts[0] += 1;
+                } else {
+                    int place = starts[s.charAt(index)];
+                    sorted[place] = s;
+                    starts[s.charAt(index)] += 1;
+                }
+            }
+            return sorted;
         }
 
     /**
