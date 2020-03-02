@@ -4,6 +4,7 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 import org.junit.Test;
 
+
 public class SanityCheckTest {
     @Test
     public void sanityEnergyTest() {
