@@ -66,7 +66,60 @@ public class CountingSort {
      * @param arr int array that will be sorted
      */
     public static int[] betterCountingSort(int[] arr) {
-        // TODO make counting sort work with arrays containing negative numbers.
-        return null;
+        // find max
+        int max = Integer.MIN_VALUE;
+        for (int i : arr) {
+            max = max > i ? max : i;
+        }
+        //find min
+        int min = 0;
+        for (int i : arr) {
+            min = min < i ? min : i;
+        }
+
+        if (min == 0) {
+            return naiveCountingSort(arr);
+        }
+        int[] countsPositive = new int[max + 1];
+        int[] countsNegative = new int[-min + 1];
+        int positiveNum = 0;
+        int negativeNum = 0;
+        for (int item : arr) {
+            if (item >= 0) {
+                countsPositive[item]++;
+                positiveNum += 1;
+            } else {
+                countsNegative[-item]++;
+                negativeNum += 1;
+            }
+        }
+
+        int[] positiveSorted = new int[positiveNum];
+        int[] negativeSorted = new int[negativeNum];
+        int[] sorted = new int[arr.length];
+        //sort positive numbers
+        int k1 = 0;
+        for (int i = 0; i < countsPositive.length; i += 1) {
+            for (int j = 0; j < countsPositive[i]; j += 1, k1 += 1) {
+                positiveSorted[k1] = i;
+            }
+        }
+
+        //sort negative number in reverse order.
+        int k2 = 0;
+        for (int i = countsNegative.length - 1; i > 0; i -= 1) {
+            for (int j = 0; j < countsNegative[i]; j += 1, k2 += 1) {
+                negativeSorted[k2] = -i;
+            }
+        }
+        int k3 = 0;
+        for (int i = 0; i < k2; i += 1, k3 += 1) {
+            sorted[k3] = negativeSorted[i];
+        }
+        for (int i = 0; i < k1; i += 1, k3 += 1) {
+            sorted[k3] = positiveSorted[i];
+        }
+
+        return sorted;
     }
 }
