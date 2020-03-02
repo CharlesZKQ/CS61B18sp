@@ -8,7 +8,7 @@ public class SeamCarver {
     private int height;
 
     public SeamCarver(Picture picture) {
-        pic = picture;
+        pic = new Picture(picture);
         width = pic.width();
         height = pic.height();
     }
@@ -110,58 +110,170 @@ public class SeamCarver {
 
     // sequence of indices for vertical seam
     public int[] findVerticalSeam() {
+//        int[] seam = new int[height];
+//        double totalEnergy = Double.MAX_VALUE;
+//
+//        for (int col = 0; col < width; col++) {
+//            int x = col;
+//            int y = 0;
+//            int[] tempSeam = new int[height];
+//            double tempEnergy = energy(x, y);
+//            tempSeam[y] = x;
+//
+//            y = y + 1;//start from row 1
+//
+//            double energyL = 0.0, energyM = 0.0, energyR = 0.0;
+//            while (y < height) {
+//                int left = x - 1;
+//                int middle = x;
+//                int right = x + 1;
+//
+//                if (left < 0) {
+//                    energyL = Double.MAX_VALUE;
+//                } else {
+//                    energyL = energy(left, y);
+//                }
+//
+//                if (right > width - 1) {
+//                    energyR = Double.MAX_VALUE;
+//                } else {
+//                    energyR = energy(right, y);
+//                }
+//                energyM = energy(middle, y);
+//                //get the samllest energy and the index of column(left, middle, right) at row y
+//                if (energyL <= energyM && energyL <= energyR) {
+//                    tempEnergy += energyL;
+//                    tempSeam[y] = left;
+//                    x = left;
+//                } else if (energyR <= energyL && energyR <= energyM) {
+//                    tempEnergy += energyR;
+//                    tempSeam[y] = right;
+//                    x = right;
+//                } else {
+//                    tempEnergy += energyM;
+//                    tempSeam[y] = middle;
+//                    x = middle;
+//                }
+//                y = y + 1;
+//            }
+//            if (tempEnergy <= totalEnergy) {
+//                totalEnergy = tempEnergy;
+//                seam = tempSeam;
+//            }
+//
+//        }
+//
+//        return seam;
+
         int[] seam = new int[height];
+
         double totalEnergy = Double.MAX_VALUE;
 
+
+
         for (int col = 0; col < width; col++) {
-            int x = col;
+
             int y = 0;
-            int[] tempSeam = new int[height];
+
+            int x = col;
+
+            int[] temp = new int[height];
+
             double tempEnergy = energy(x, y);
-            tempSeam[y] = x;
 
-            y = y + 1;//start from row 1
+            temp[y] = x;
 
-            double energyL = 0.0, energyM = 0.0, energyR = 0.0;
+            y++;
+
+
+
+            double topE = 0.0, leftE = 0.0, rightE = 0.0;
+
+
+
+
+
             while (y < height) {
+
+                int top = x;
+
                 int left = x - 1;
-                int middle = x;
+
                 int right = x + 1;
 
-                if (left < 0) {
-                    energyL = Double.MAX_VALUE;
+
+
+                topE = energy(top, y);
+
+                if (left >= 0) {
+
+                    leftE = energy(left, y);
+
                 } else {
-                    energyL = energy(left, y);
+
+                    leftE = Double.MAX_VALUE;
+
                 }
 
-                if (right > width - 1) {
-                    energyR = Double.MAX_VALUE;
+
+
+                if (right < width) {
+
+                    rightE = energy(right, y);
+
                 } else {
-                    energyR = energy(right, y);
+
+                    rightE = Double.MAX_VALUE;
+
                 }
-                energyM = energy(middle, y);
-                //get the samllest energy and the index of column(left, middle, right) at row y
-                if (energyL <= energyM && energyL <= energyR) {
-                    tempEnergy += energyL;
-                    tempSeam[y] = left;
+
+
+
+                if (topE <= leftE && topE <= rightE) {
+
+                    tempEnergy += topE;
+
+                    temp[y] = top;
+
+                    x = top;
+
+                } else if (leftE <= topE && leftE <= rightE) {
+
+                    tempEnergy += leftE;
+
+                    temp[y] = left;
+
                     x = left;
-                } else if (energyR <= energyL && energyR <= energyM) {
-                    tempEnergy += energyR;
-                    tempSeam[y] = right;
-                    x = right;
+
                 } else {
-                    tempEnergy += energyM;
-                    tempSeam[y] = middle;
-                    x = middle;
+
+                    tempEnergy += rightE;
+
+                    temp[y] = right;
+
+                    x = right;
+
                 }
-                y = y + 1;
+
+
+
+                y++;
+
             }
+
+
+
             if (tempEnergy <= totalEnergy) {
+
                 totalEnergy = tempEnergy;
-                seam = tempSeam;
+
+                seam = temp;
+
             }
 
         }
+
+
 
         return seam;
     }
@@ -181,7 +293,7 @@ public class SeamCarver {
     }
 
     private boolean checkConsecutive(int[] seam) {
-        for (int i = 0; i < seam.length; i++) {
+        for (int i = 0; i < seam.length - 1; i++) {
             if (abs(seam[i], seam[i+1]) > 1) {
                 return false;
             }
